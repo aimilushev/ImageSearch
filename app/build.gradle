@@ -33,10 +33,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
-
-    //TODO:remove
-    implementation "com.github.bumptech.glide:glide:4.8.0"
-    kapt "com.github.bumptech.glide:compiler:4.8.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$archLifecycleVersion"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'

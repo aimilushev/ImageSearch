@@ -3,12 +3,14 @@ package com.milushev.imagesearch.search
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.milushev.imagesearch.GlideRequests
 import com.milushev.imagesearch.data.model.Photo
+import kotlinx.coroutines.CoroutineScope
 
-class PhotosAdapter(private val glide: GlideRequests) : PagedListAdapter<Photo, PhotoViewHolder>(PHOTO_COMPARATOR) {
+class PhotosAdapter(private val imageDownloadScope: CoroutineScope) :
+    PagedListAdapter<Photo, PhotoViewHolder>(PHOTO_COMPARATOR) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PhotoViewHolder.create(parent, glide)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        PhotoViewHolder.create(parent, imageDownloadScope)
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         holder.bind(getItem(position))

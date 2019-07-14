@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.milushev.imagesearch.GlideRequests
 import com.milushev.imagesearch.R
 import com.milushev.imagesearch.data.model.Photo
 import com.milushev.imagesearch.data.source.ApiConstants
+import com.milushev.imagesearch.loadimage.ImageLoader
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * A RecyclerView ViewHolder that displays a square photo.
  */
-class PhotoViewHolder(view: View, private val glide: GlideRequests) : RecyclerView.ViewHolder(view) {
+class PhotoViewHolder(view: View, private val imageDownloadScope: CoroutineScope) : RecyclerView.ViewHolder(view) {
     private val thumbnail: ImageView = view.findViewById(R.id.thumbnail)
     private var photo: Photo? = null
 
@@ -32,9 +33,7 @@ class PhotoViewHolder(view: View, private val glide: GlideRequests) : RecyclerVi
     fun bind(photo: Photo?) {
         this.photo = photo
         photo?.let {
-            glide.load(getPhotoUrl(it))
-                .centerCrop()
-                .into(thumbnail)
+            ImageLoader.loadImage(getPhotoUrl(it), thumbnail, imageDownloadScope)
         }
     }
 
@@ -47,10 +46,10 @@ class PhotoViewHolder(view: View, private val glide: GlideRequests) : RecyclerVi
     )
 
     companion object {
-        fun create(parent: ViewGroup, glide: GlideRequests): PhotoViewHolder {
+        fun create(parent: ViewGroup, imageDownloadScope: CoroutineScope): PhotoViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.photo_item, parent, false)
-            return PhotoViewHolder(view, glide)
+            return PhotoViewHolder(view, imageDownloadScope)
         }
     }
 }

@@ -8,19 +8,12 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
-import com.milushev.imagesearch.GlideApp
 import com.milushev.imagesearch.R
-import com.milushev.imagesearch.data.model.NetworkState
 import com.milushev.imagesearch.data.model.Photo
-import com.milushev.imagesearch.data.model.Status
 import com.milushev.imagesearch.extensions.hideKeyboardFrom
-import com.milushev.imagesearch.utils.Event
 import com.milushev.imagesearch.utils.EventObserver
 import com.milushev.imagesearch.utils.ServiceLocator
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -70,8 +63,7 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         photosRecyclerView.layoutManager = GridLayoutManager(requireContext(), COLUMNS_IN_GRID)
 
-        val glide = GlideApp.with(this)
-        adapter = PhotosAdapter(glide)
+        adapter = PhotosAdapter(lifecycleScope)
         photosRecyclerView.adapter = adapter
 
     }

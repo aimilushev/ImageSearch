@@ -16,7 +16,7 @@ buildscript {
         kotlinVersion = '1.3.31'
         okhttpVersion = "3.10.0"
         coroutinesVersion = '1.2.1'
-        archLifecycleVersion = '2.1.0-rc01'
+        archLifecycleVersion = '2.2.0-alpha02'
         recyclerViewVersion = '1.0.0'
         pagingVersion = '2.1.0'
         mockitoVersion = '2.8.9'
