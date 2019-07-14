@@ -2,9 +2,11 @@ package com.milushev.imagesearch.utils
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import com.milushev.imagesearch.data.json.JsonMapper
 import com.milushev.imagesearch.data.source.FlickrPhotosRepository
 import com.milushev.imagesearch.data.source.NetworkPhotosDataSource
 import com.milushev.imagesearch.data.source.PhotosRepository
+import com.milushev.imagesearch.data.source.ws.WebServiceExecutor
 
 /**
  * Super simplified service locator implementation to allow us to replace default implementations
@@ -43,7 +45,13 @@ interface ServiceLocator {
 open class DefaultServiceLocator(private val appContext: Context) : ServiceLocator {
 
     override fun getRepository(): PhotosRepository {
-        return FlickrPhotosRepository(NetworkPhotosDataSource(NetworkUtils(appContext)))
+        return FlickrPhotosRepository(
+            NetworkPhotosDataSource(
+                NetworkUtils(appContext),
+                WebServiceExecutor(),
+                JsonMapper
+            )
+        )
     }
 
 }
