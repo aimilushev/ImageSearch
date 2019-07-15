@@ -28,9 +28,9 @@ class PhotosPagedDataSource(
                     result.data.photos?.photo?.let { photosResult ->
                         callback.onResult(photosResult, null, 2)
                         networkState.postValue(NetworkState.LOADED)
-                    } ?: networkState.postValue(NetworkState.error("empty photos list, stat=${result.data.stat}"))
+                    } ?: networkState.postValue(NetworkState.ERROR("empty photos list, stat=${result.data.stat}"))
                 }
-                is Result.Error -> networkState.postValue(NetworkState.error(result.exception.message))
+                is Result.Error -> networkState.postValue(NetworkState.ERROR(result.exception.message))
             }
         }
 
@@ -48,10 +48,10 @@ class PhotosPagedDataSource(
                         val nextKey: Int? = if (pageNum == totalPages) null else pageNum + 1
                         callback.onResult(result.data.photos.photo, nextKey)
                         networkState.postValue(NetworkState.LOADED)
-                    } ?: networkState.postValue(NetworkState.error("empty photos list, stat=${result.data.stat}"))
+                    } ?: networkState.postValue(NetworkState.ERROR("empty photos list, stat=${result.data.stat}"))
                 }
 
-                is Result.Error -> networkState.postValue(NetworkState.error(result.exception.message))
+                is Result.Error -> networkState.postValue(NetworkState.ERROR(result.exception.message))
             }
 
         }

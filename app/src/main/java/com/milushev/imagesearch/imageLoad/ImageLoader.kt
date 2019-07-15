@@ -8,7 +8,12 @@ import kotlin.coroutines.CoroutineContext
 
 class ImageLoader(private val imageCache: ImageCache, private val imageDownloader: ImageDownloader) {
 
-    fun loadImage(url: String, imageView: ImageView, coroutineScope: CoroutineScope = GlobalScope, uiDispatcher: CoroutineContext = Dispatchers.Main) {
+    fun loadImage(
+        url: String,
+        imageView: ImageView,
+        coroutineScope: CoroutineScope = GlobalScope,
+        uiDispatcher: CoroutineContext = Dispatchers.Main
+    ) {
 
         //try getting it from cache
         imageCache.get(url)?.let {

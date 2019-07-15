@@ -6,7 +6,6 @@ import androidx.paging.PagedList
 import com.milushev.imagesearch.R
 import com.milushev.imagesearch.data.model.NetworkState
 import com.milushev.imagesearch.data.model.Photo
-import com.milushev.imagesearch.data.model.Status
 import com.milushev.imagesearch.data.source.PhotosRepository
 import com.milushev.imagesearch.data.source.paged.PhotosPagedDataSourceFactory
 import com.milushev.imagesearch.utils.Event
@@ -37,17 +36,16 @@ class SearchViewModel(private val photosRepository: PhotosRepository) : ViewMode
         }
 
         progressBarVisible = Transformations.map(networkState) { state ->
-            return@map when (state.status) {
-                Status.RUNNING -> true
+            return@map when (state) {
+                is NetworkState.LOADING -> true
                 else -> false
             }
         }
 
         errorMessage = Transformations.map(networkState) { state ->
-            return@map if (state.status == Status.FAILED) {
-                Event(R.string.communication_error)
-            } else {
-                null
+            return@map when (state) {
+                is NetworkState.ERROR -> Event(R.string.communication_error)
+                else -> null
             }
         }
     }

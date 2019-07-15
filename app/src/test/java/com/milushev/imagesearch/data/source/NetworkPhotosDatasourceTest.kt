@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.json.JSONException
-import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.*
@@ -65,7 +65,7 @@ class NetworkPhotosDatasourceTest {
         val result = dataSource.search("search", 2)
 
         //THEN
-        Assert.assertTrue(result is Result.Error)
+        assertTrue(result is Result.Error)
     }
 
     @ExperimentalCoroutinesApi
@@ -79,7 +79,7 @@ class NetworkPhotosDatasourceTest {
         val result = dataSource.search("search", 2)
 
         //THEN
-        Assert.assertTrue(result is Result.Error)
+        assertTrue(result is Result.Error)
     }
 
     @ExperimentalCoroutinesApi
@@ -94,7 +94,7 @@ class NetworkPhotosDatasourceTest {
         val result = dataSource.search("search", 2)
 
         //THEN
-        Assert.assertTrue(result is Result.Error)
+        assertTrue(result is Result.Error)
     }
 
     @ExperimentalCoroutinesApi
@@ -110,7 +110,7 @@ class NetworkPhotosDatasourceTest {
         val result = dataSource.search("search", 2)
 
         //THEN
-        Assert.assertTrue(result is Result.Success)
-        Assert.assertTrue(result is Result.Success && result.data == searchResult)
+        assertTrue(result is Result.Success)
+        assertTrue(result is Result.Success && result.data == searchResult)
     }
 }

@@ -58,7 +58,7 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultMoreThanOnePage.photos!!.photo, null, 2)
-        assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
     }
 
     @ExperimentalCoroutinesApi
@@ -74,7 +74,7 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null, 2)
-        assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
     }
 
     @ExperimentalCoroutinesApi
@@ -89,7 +89,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadInitial(PageKeyedDataSource.LoadInitialParams(1, false), callback)
 
         //THEN
-        assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.FAILED)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.ERROR)
     }
 
     @ExperimentalCoroutinesApi
@@ -104,7 +104,7 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultMoreThanOnePage.photos!!.photo, 2)
-        assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
     }
 
     @ExperimentalCoroutinesApi
@@ -119,7 +119,7 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null)
-        assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
     }
 
     @ExperimentalCoroutinesApi
@@ -133,7 +133,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadAfter(PageKeyedDataSource.LoadParams(1, 10), callback)
 
         //THEN
-        assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.FAILED)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.ERROR)
     }
 
 }
