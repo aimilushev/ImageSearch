@@ -36,8 +36,10 @@ class NetworkPhotosDataSource(
 
         } catch (io: IOException) {
             Result.Error(GenericServerException())
-        } catch (e: JSONException) {
-            Result.Error(ResponseParsingException(e.message))
+        } catch (je: JSONException) {
+            Result.Error(ResponseParsingException(je.message))
+        } catch (e: Exception) {
+            Result.Error(e)
         }
 
     }

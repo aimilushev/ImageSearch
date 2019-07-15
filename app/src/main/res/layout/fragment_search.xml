@@ -11,7 +11,7 @@
             android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:queryHint="Search photo"
+            android:queryHint="@string/search_hint"
             android:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
