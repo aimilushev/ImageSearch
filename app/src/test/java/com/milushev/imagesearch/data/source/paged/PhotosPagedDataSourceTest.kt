@@ -7,10 +7,9 @@ import androidx.paging.PageKeyedDataSource.LoadCallback
 import com.milushev.imagesearch.LiveDataTestUtil
 import com.milushev.imagesearch.data.model.*
 import com.milushev.imagesearch.data.source.PhotosRepository
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -37,6 +36,10 @@ class PhotosPagedDataSourceTest {
         Photos(1, 1, 1, 1, listOf(dummyPhoto)),
         "stat"
     )
+    private val dummyResultWithoutPhotos = PhotoSearchResult(
+        Photos(0, 0, 0, 0, listOf()),
+        "stat"
+    )
 
     @ExperimentalCoroutinesApi
     @Before
@@ -47,7 +50,7 @@ class PhotosPagedDataSourceTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun loadInitial_searchSuccessMoreThanOnePage() = runBlockingTest {
+    fun loadInitial_searchSuccessMoreThanOnePage() {
         //GIVEN
         photosRepository.photosResult = Result.Success(dummyResultMoreThanOnePage)
         val callback: PageKeyedDataSource.LoadInitialCallback<Int, Photo> =
@@ -58,12 +61,12 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultMoreThanOnePage.photos!!.photo, null, 2)
-        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.Loaded)
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun loadInitial_searchSuccessOnlyOnePage() = runBlockingTest {
+    fun loadInitial_searchSuccessOnlyOnePage() {
         //GIVEN
         photosRepository.photosResult = Result.Success(dummyResultOnlyOnePage)
         val callback: PageKeyedDataSource.LoadInitialCallback<Int, Photo> =
@@ -74,12 +77,27 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null, 2)
-        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.Loaded)
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun loadInitial_fail() = runBlockingTest {
+    fun loadInitial_noResultsFound() {
+        //GIVEN
+        photosRepository.photosResult = Result.Success(dummyResultWithoutPhotos)
+        val callback: PageKeyedDataSource.LoadInitialCallback<Int, Photo> =
+            mock(PageKeyedDataSource.LoadInitialCallback::class.java) as PageKeyedDataSource.LoadInitialCallback<Int, Photo>
+
+        //WHEN
+        dataSource.loadInitial(PageKeyedDataSource.LoadInitialParams(1, false), callback)
+
+        //THEN
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.EmptyResult)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun loadInitial_searchFail() {
         //GIVEN
         photosRepository.photosResult = Result.Error(Exception())
         val callback: PageKeyedDataSource.LoadInitialCallback<Int, Photo> =
@@ -89,12 +107,12 @@ class PhotosPagedDataSourceTest {
         dataSource.loadInitial(PageKeyedDataSource.LoadInitialParams(1, false), callback)
 
         //THEN
-        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.ERROR)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.Error)
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun loadAfter_searchSuccessMoreThanOnePage() = runBlockingTest {
+    fun loadAfter_searchSuccessMoreThanOnePage() {
         //GIVEN
         photosRepository.photosResult = Result.Success(dummyResultMoreThanOnePage)
         val callback: LoadCallback<Int, Photo> = mock(LoadCallback::class.java) as LoadCallback<Int, Photo>
@@ -104,12 +122,12 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultMoreThanOnePage.photos!!.photo, 2)
-        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.Loaded)
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun loadAfter_searchSuccessOnlyOnePage() = runBlockingTest {
+    fun loadAfter_searchSuccessOnlyOnePage() {
         //GIVEN
         photosRepository.photosResult = Result.Success(dummyResultOnlyOnePage)
         val callback: LoadCallback<Int, Photo> = mock(LoadCallback::class.java) as LoadCallback<Int, Photo>
@@ -119,12 +137,26 @@ class PhotosPagedDataSourceTest {
 
         //THEN
         verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null)
-        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.LOADED)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.Loaded)
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun loadAfter_fail() = runBlockingTest {
+    fun loadAfter_noResultsFound() {
+        //GIVEN
+        photosRepository.photosResult = Result.Success(dummyResultWithoutPhotos)
+        val callback: LoadCallback<Int, Photo> = mock(LoadCallback::class.java) as LoadCallback<Int, Photo>
+
+        //WHEN
+        dataSource.loadAfter(PageKeyedDataSource.LoadParams(1, 10), callback)
+
+        //THEN
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.EmptyResult)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun loadAfter_searchFail() {
         //GIVEN
         photosRepository.photosResult = Result.Error(Exception())
         val callback: LoadCallback<Int, Photo> = mock(LoadCallback::class.java) as LoadCallback<Int, Photo>
@@ -133,7 +165,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadAfter(PageKeyedDataSource.LoadParams(1, 10), callback)
 
         //THEN
-        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.ERROR)
+        assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.Error)
     }
 
 }

@@ -35,3 +35,9 @@ SearchFragment is the screen responsible for visualising the search bar and sear
 
 ## Unit tests
  Unit tests are based on Junit 4, Mockito and Kotlinx Coroutines Test
+
+ Possible improvements
+ ---------------------
+ - Implement retry mechanism when a web service call fails
+ - Implement image cache on file system
+ - Write some integration tests

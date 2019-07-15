@@ -37,14 +37,15 @@ class SearchViewModel(private val photosRepository: PhotosRepository) : ViewMode
 
         progressBarVisible = Transformations.map(networkState) { state ->
             return@map when (state) {
-                is NetworkState.LOADING -> true
+                is NetworkState.Loading -> true
                 else -> false
             }
         }
 
         errorMessage = Transformations.map(networkState) { state ->
             return@map when (state) {
-                is NetworkState.ERROR -> Event(R.string.communication_error)
+                is NetworkState.Error -> Event(R.string.toast_communication_error)
+                is NetworkState.EmptyResult -> Event(R.string.toast_empty_result)
                 else -> null
             }
         }
