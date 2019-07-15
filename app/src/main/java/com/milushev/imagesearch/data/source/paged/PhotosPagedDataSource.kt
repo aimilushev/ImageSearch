@@ -19,7 +19,10 @@ class PhotosPagedDataSource(
         coroutineScope.launch {
             when (val result: Result<PhotoSearchResult> = photosRepository.search(searchKeyword)) {
                 is Result.Success -> {
-                    result.data.photos?.photo?.let { photosList -> onLoadInitialSuccess(photosList, callback) }
+                    result.data.photos?.photo?.let { photosList ->
+                        val isOnLastPage = result.data.photos.page == result.data.photos.pages
+                        onLoadInitialSuccess(photosList, isOnLastPage, callback)
+                    }
                         ?: onError("null photos list, ws stat=${result.data.stat}")
                 }
                 is Result.Error -> onError(result.exception.message)
@@ -45,11 +48,16 @@ class PhotosPagedDataSource(
         // ignored, since we only ever append to our initial load
     }
 
-    private fun onLoadInitialSuccess(photos: List<Photo>, callback: LoadInitialCallback<Int, Photo>) {
+    private fun onLoadInitialSuccess(
+        photos: List<Photo>,
+        isOnLastPage: Boolean,
+        callback: LoadInitialCallback<Int, Photo>
+    ) {
         if (photos.isEmpty()) {
             networkState.postValue(NetworkState.EmptyResult)
         } else {
-            callback.onResult(photos, null, 2)
+            val nextPageKey = if (isOnLastPage) null else 2
+            callback.onResult(photos, null, nextPageKey)
             networkState.postValue(NetworkState.Loaded)
         }
     }

@@ -40,4 +40,5 @@ SearchFragment is the screen responsible for visualising the search bar and sear
  ---------------------
  - Implement retry mechanism when a web service call fails
  - Implement image cache on file system
+ - Add voice search and search suggestions
  - Write some integration tests

@@ -48,10 +48,10 @@ class SearchFragment : Fragment() {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         })
 
-        //TODO: enable voice search on searchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.searchQuery.value = query
+                searchView.clearFocus()
                 requireContext().hideKeyboardFrom(searchView)
                 return true
             }
