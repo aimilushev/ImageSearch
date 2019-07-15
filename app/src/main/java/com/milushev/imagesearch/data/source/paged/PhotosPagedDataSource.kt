@@ -1,15 +1,15 @@
 package com.milushev.imagesearch.data.source.paged
 
-import androidx.paging.PageKeyedDataSource
-import com.milushev.imagesearch.data.model.Photo
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.PageKeyedDataSource
 import com.milushev.imagesearch.data.model.NetworkState
+import com.milushev.imagesearch.data.model.Photo
 import com.milushev.imagesearch.data.model.PhotoSearchResult
 import com.milushev.imagesearch.data.model.Result
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import com.milushev.imagesearch.data.source.PhotosRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class PhotosPagedDataSource(
@@ -25,8 +25,10 @@ class PhotosPagedDataSource(
             when (val result: Result<PhotoSearchResult> = photosRepository.search(searchKeyword)) {
 
                 is Result.Success -> {
-                    callback.onResult(result.data.photos.photo, null, 2)
-                    networkState.postValue(NetworkState.LOADED)
+                    result.data.photos?.photo?.let { photosResult ->
+                        callback.onResult(photosResult, null, 2)
+                        networkState.postValue(NetworkState.LOADED)
+                    } ?: networkState.postValue(NetworkState.error("empty photos list, stat=${result.data.stat}"))
                 }
                 is Result.Error -> networkState.postValue(NetworkState.error(result.exception.message))
             }
@@ -40,12 +42,13 @@ class PhotosPagedDataSource(
             when (val result: Result<PhotoSearchResult> = photosRepository.search(searchKeyword, params.key)) {
 
                 is Result.Success -> {
-                    val pageNum = result.data.photos.page
-                    val totalPages = result.data.photos.pages
-                    val nextKey: Int? = if (pageNum == totalPages) null else pageNum + 1
-                    callback.onResult(result.data.photos.photo, nextKey)
-
-                    networkState.postValue(NetworkState.LOADED)
+                    result.data.photos?.let { photos ->
+                        val pageNum = photos.page
+                        val totalPages = photos.pages
+                        val nextKey: Int? = if (pageNum == totalPages) null else pageNum + 1
+                        callback.onResult(result.data.photos.photo, nextKey)
+                        networkState.postValue(NetworkState.LOADED)
+                    } ?: networkState.postValue(NetworkState.error("empty photos list, stat=${result.data.stat}"))
                 }
 
                 is Result.Error -> networkState.postValue(NetworkState.error(result.exception.message))

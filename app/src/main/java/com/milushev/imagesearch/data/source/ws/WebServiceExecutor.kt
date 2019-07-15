@@ -26,7 +26,7 @@ class WebServiceExecutor {
                 if (responseCode != HttpsURLConnection.HTTP_OK) {
                     throw IOException("HTTP error code: $responseCode")
                 }
-                inputStream?.let { stream -> readStream(stream) }
+                return@run inputStream?.let { stream -> readStream(stream) }
             }
         } finally {
             // Close Stream and disconnect HTTPS connection.
@@ -38,7 +38,7 @@ class WebServiceExecutor {
     /**
      * Converts the contents of an InputStream to a String.
      */
-    private fun readStream(stream: InputStream): String? {
+    private fun readStream(stream: InputStream): String {
         val bufferSize = 1024
         val buffer = CharArray(bufferSize)
         val out = StringBuilder()

@@ -1,6 +1,5 @@
 package com.milushev.imagesearch.data.source
 
-import android.net.Uri
 import com.milushev.imagesearch.data.json.JsonMapper
 import com.milushev.imagesearch.data.model.PhotoSearchResult
 import com.milushev.imagesearch.data.model.Result
@@ -12,6 +11,7 @@ import com.milushev.imagesearch.utils.NetworkUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONException
 import java.io.IOException
 import java.net.URL
 
@@ -29,11 +29,14 @@ class NetworkPhotosDataSource(
         }
 
         return@withContext try {
-            val responseString = webServiceExecutor.executeGetRequest(getSearchUrl(query, page))
-            Result.Success(jsonMapper.mapSearchResponse(responseString))
+
+            webServiceExecutor.executeGetRequest(getSearchUrl(query, page))?.let { responseString ->
+                Result.Success(jsonMapper.mapSearchResponse(responseString))
+            } ?: Result.Error(GenericServerException("Empty responseBody"))
+
         } catch (io: IOException) {
             Result.Error(GenericServerException())
-        } catch (e: Exception) { // TODO change to parsing exception
+        } catch (e: JSONException) {
             Result.Error(ResponseParsingException(e.message))
         }
 

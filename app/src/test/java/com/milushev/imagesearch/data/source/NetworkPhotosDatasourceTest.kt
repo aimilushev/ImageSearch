@@ -10,6 +10,7 @@ import com.milushev.imagesearch.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.json.JSONException
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -87,7 +88,7 @@ class NetworkPhotosDatasourceTest {
         //GIVEN
         `when`(mockedNetworkUtils.hasNetworkConnection()).thenReturn(true)
         `when`(mockedWebServiceExecutor.executeGetRequest(any())).thenReturn("mocked response")
-        `when`(mockedJsonMapper.mapSearchResponse(any())).thenThrow(RuntimeException())
+        `when`(mockedJsonMapper.mapSearchResponse(any())).thenThrow(JSONException(""))
 
         //WHEN
         val result = dataSource.search("search", 2)

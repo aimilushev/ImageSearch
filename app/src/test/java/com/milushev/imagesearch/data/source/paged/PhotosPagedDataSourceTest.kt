@@ -57,7 +57,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadInitial(PageKeyedDataSource.LoadInitialParams(1, false), callback)
 
         //THEN
-        verify(callback).onResult(dummyResultMoreThanOnePage.photos.photo, null, 2)
+        verify(callback).onResult(dummyResultMoreThanOnePage.photos!!.photo, null, 2)
         assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
     }
 
@@ -73,7 +73,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadInitial(PageKeyedDataSource.LoadInitialParams(1, false), callback)
 
         //THEN
-        verify(callback).onResult(dummyResultOnlyOnePage.photos.photo, null, 2)
+        verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null, 2)
         assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
     }
 
@@ -103,7 +103,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadAfter(PageKeyedDataSource.LoadParams(1, 10), callback)
 
         //THEN
-        verify(callback).onResult(dummyResultMoreThanOnePage.photos.photo, 2)
+        verify(callback).onResult(dummyResultMoreThanOnePage.photos!!.photo, 2)
         assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
     }
 
@@ -118,7 +118,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadAfter(PageKeyedDataSource.LoadParams(1, 10), callback)
 
         //THEN
-        verify(callback).onResult(dummyResultOnlyOnePage.photos.photo, null)
+        verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null)
         assertTrue(LiveDataTestUtil.getValue(networkState).status == Status.SUCCESS)
     }
 

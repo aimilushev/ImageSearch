@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'//TODO delete with glade
 
 android {
     compileSdkVersion 28
@@ -39,9 +38,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    //TODO: remove this and implement
-    implementation 'com.google.code.gson:gson:2.8.5'
 
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
