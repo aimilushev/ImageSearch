@@ -4,13 +4,14 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.milushev.imagesearch.data.model.Photo
+import com.milushev.imagesearch.imageLoad.ImageLoader
 import kotlinx.coroutines.CoroutineScope
 
-class PhotosAdapter(private val imageDownloadScope: CoroutineScope) :
+class PhotosAdapter(private val imageLoader: ImageLoader, private val imageDownloadScope: CoroutineScope) :
     PagedListAdapter<Photo, PhotoViewHolder>(PHOTO_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        PhotoViewHolder.create(parent, imageDownloadScope)
+        PhotoViewHolder.create(parent, imageLoader, imageDownloadScope)
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         holder.bind(getItem(position))

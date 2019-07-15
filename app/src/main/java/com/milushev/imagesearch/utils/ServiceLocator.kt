@@ -7,6 +7,9 @@ import com.milushev.imagesearch.data.source.FlickrPhotosRepository
 import com.milushev.imagesearch.data.source.NetworkPhotosDataSource
 import com.milushev.imagesearch.data.source.PhotosRepository
 import com.milushev.imagesearch.data.source.ws.WebServiceExecutor
+import com.milushev.imagesearch.imageLoad.ImageLoader
+import com.milushev.imagesearch.imageLoad.cache.InMemoryCache
+import com.milushev.imagesearch.imageLoad.network.NetworkImageDownloader
 
 /**
  * Super simplified service locator implementation to allow us to replace default implementations
@@ -37,6 +40,8 @@ interface ServiceLocator {
 
     fun getRepository(): PhotosRepository
 
+    fun getImageLoader(): ImageLoader
+
 }
 
 /**
@@ -52,6 +57,10 @@ open class DefaultServiceLocator(private val appContext: Context) : ServiceLocat
                 JsonMapper
             )
         )
+    }
+
+    override fun getImageLoader(): ImageLoader {
+        return ImageLoader(InMemoryCache(), NetworkImageDownloader())
     }
 
 }

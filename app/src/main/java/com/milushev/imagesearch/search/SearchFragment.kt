@@ -63,7 +63,8 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         photosRecyclerView.layoutManager = GridLayoutManager(requireContext(), COLUMNS_IN_GRID)
 
-        adapter = PhotosAdapter(lifecycleScope)
+        val imageLoader = ServiceLocator.instance(requireContext()).getImageLoader()
+        adapter = PhotosAdapter(imageLoader, lifecycleScope)
         photosRecyclerView.adapter = adapter
 
     }

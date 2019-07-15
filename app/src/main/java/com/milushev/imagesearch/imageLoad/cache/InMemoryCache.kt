@@ -1,4 +1,4 @@
-package com.milushev.imagesearch.loadimage.cache
+package com.milushev.imagesearch.imageLoad.cache
 
 import android.graphics.Bitmap
 import android.util.LruCache
