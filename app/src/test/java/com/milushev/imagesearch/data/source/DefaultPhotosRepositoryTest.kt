@@ -6,7 +6,7 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
-class FlickrPhotosRepositoryTest {
+class DefaultPhotosRepositoryTest {
 
 
     @ExperimentalCoroutinesApi
@@ -15,7 +15,7 @@ class FlickrPhotosRepositoryTest {
         //GIVEN
 
         val mockedDataSource = mock(PhotosDataSource::class.java)
-        val repository = FlickrPhotosRepository(mockedDataSource)
+        val repository = DefaultPhotosRepository(mockedDataSource)
 
         val searchQuery = "test"
         val page = 23

@@ -15,7 +15,7 @@ import com.milushev.imagesearch.R
 import com.milushev.imagesearch.data.model.Photo
 import com.milushev.imagesearch.extensions.hideKeyboardFrom
 import com.milushev.imagesearch.utils.EventObserver
-import com.milushev.imagesearch.utils.ServiceLocator
+import com.milushev.imagesearch.utils.Injector
 import kotlinx.android.synthetic.main.fragment_search.*
 
 
@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         photosRecyclerView.layoutManager = GridLayoutManager(requireContext(), COLUMNS_IN_GRID)
 
-        val imageLoader = ServiceLocator.instance(requireContext()).getImageLoader()
+        val imageLoader = Injector.instance(requireContext()).getImageLoader()
         adapter = PhotosAdapter(imageLoader, lifecycleScope)
         photosRecyclerView.adapter = adapter
 
@@ -71,7 +71,7 @@ class SearchFragment : Fragment() {
 
     private fun getViewModel() = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val repo = ServiceLocator.instance(requireContext())
+            val repo = Injector.instance(requireContext())
                 .getRepository()
             @Suppress("UNCHECKED_CAST")
             return SearchViewModel(repo) as T
