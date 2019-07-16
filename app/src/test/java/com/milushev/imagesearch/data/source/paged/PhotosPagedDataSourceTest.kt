@@ -76,7 +76,7 @@ class PhotosPagedDataSourceTest {
         dataSource.loadInitial(PageKeyedDataSource.LoadInitialParams(1, false), callback)
 
         //THEN
-        verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null, 2)
+        verify(callback).onResult(dummyResultOnlyOnePage.photos!!.photo, null, null)
         assertTrue(LiveDataTestUtil.getValue(networkState) is NetworkState.Loaded)
     }
 
